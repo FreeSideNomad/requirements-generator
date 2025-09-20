@@ -354,7 +354,7 @@
     <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-50"></div>
 
     <!-- Loading Indicator -->
-    <div id="global-loading" class="htmx-indicator fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="global-loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
             <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-brand-600"></div>
             <span class="text-sm text-gray-600">Loading...</span>
@@ -381,16 +381,31 @@
 
             // HTMX loading indicator management
             const loadingIndicator = document.getElementById('global-loading');
+            let loadingTimeout = null;
+
+            // Ensure loading indicator starts hidden
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('hidden');
+            }
 
             // Show loading indicator when HTMX request starts
             document.addEventListener('htmx:beforeRequest', function() {
                 if (loadingIndicator) {
                     loadingIndicator.classList.remove('hidden');
+
+                    // Set a fallback timeout to ensure indicator doesn't stay visible forever
+                    clearTimeout(loadingTimeout);
+                    loadingTimeout = setTimeout(function() {
+                        if (loadingIndicator) {
+                            loadingIndicator.classList.add('hidden');
+                        }
+                    }, 5000); // Hide after 5 seconds maximum
                 }
             });
 
             // Hide loading indicator when HTMX request completes
             document.addEventListener('htmx:afterRequest', function() {
+                clearTimeout(loadingTimeout);
                 if (loadingIndicator) {
                     loadingIndicator.classList.add('hidden');
                 }

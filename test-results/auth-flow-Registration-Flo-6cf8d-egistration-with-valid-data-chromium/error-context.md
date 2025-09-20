@@ -1,58 +1,56 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
-  - main [ref=e2]:
-    - generic [ref=e4]:
-      - generic [ref=e5]:
-        - img [ref=e8]
-        - heading "Create your account" [level=2] [ref=e12]
-        - paragraph [ref=e13]: Join the Requirements Generator platform
-      - generic [ref=e15]:
-        - generic [ref=e16]:
-          - generic [ref=e17]:
-            - generic [ref=e18]:
-              - generic [ref=e19]: First name
-              - textbox "First name" [ref=e21]: Test
-            - generic [ref=e22]:
-              - generic [ref=e23]: Last name
-              - textbox "Last name" [active] [ref=e25]: User
-          - generic [ref=e26]:
-            - generic [ref=e27]: Email address
-            - textbox "Email address" [ref=e29]: test-1758371393611@example.com
-          - generic [ref=e30]:
-            - generic [ref=e31]:
-              - text: Username
-              - generic [ref=e32]: (optional)
-            - textbox "Username (optional)" [ref=e34]
-          - generic [ref=e35]:
-            - generic [ref=e36]: Password
-            - generic [ref=e37]:
-              - textbox "Password" [ref=e38]: SecurePassword123!
-              - button [ref=e39] [cursor=pointer]:
-                - img [ref=e40] [cursor=pointer]
-            - generic [ref=e44]: Strong password
-          - generic [ref=e45]:
-            - generic [ref=e46]: Confirm password
-            - generic [ref=e47]:
-              - textbox "Confirm password" [ref=e48]: SecurePassword123!
-              - button [ref=e49] [cursor=pointer]:
-                - img [ref=e50] [cursor=pointer]
-            - generic [ref=e53]: Passwords match
-          - generic [ref=e54]:
-            - checkbox "I agree to the Terms of Service and Privacy Policy" [ref=e55]
-            - generic [ref=e56]:
-              - text: I agree to the
-              - link "Terms of Service" [ref=e57] [cursor=pointer]:
-                - /url: "#"
-              - text: and
-              - link "Privacy Policy" [ref=e58] [cursor=pointer]:
-                - /url: "#"
-          - button "Create account" [ref=e60] [cursor=pointer]:
-            - generic [ref=e62] [cursor=pointer]: Create account
-        - generic [ref=e63]:
-          - generic [ref=e68]: Already have an account?
-          - link "Sign in instead" [ref=e70] [cursor=pointer]:
-            - /url: /login
-  - generic [ref=e74]: Loading...
+- main [ref=e2]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e8]
+      - heading "Create your account" [level=2] [ref=e12]
+      - paragraph [ref=e13]: Join the Requirements Generator platform
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]: First name
+            - textbox "First name" [ref=e21]: Test
+          - generic [ref=e22]:
+            - generic [ref=e23]: Last name
+            - textbox "Last name" [ref=e25]: User
+        - generic [ref=e26]:
+          - generic [ref=e27]: Email address
+          - textbox "Email address" [ref=e29]: test-1758374460486@example.com
+        - generic [ref=e30]:
+          - generic [ref=e31]:
+            - text: Username
+            - generic [ref=e32]: (optional)
+          - textbox "Username (optional)" [ref=e34]
+        - generic [ref=e35]:
+          - generic [ref=e36]: Password
+          - generic [ref=e37]:
+            - textbox "Password" [ref=e38]: SecurePassword123!
+            - button [ref=e39] [cursor=pointer]:
+              - img [ref=e40] [cursor=pointer]
+          - generic [ref=e44]: Strong password
+        - generic [ref=e45]:
+          - generic [ref=e46]: Confirm password
+          - generic [ref=e47]:
+            - textbox "Confirm password" [ref=e48]: SecurePassword123!
+            - button [ref=e49] [cursor=pointer]:
+              - img [ref=e50] [cursor=pointer]
+          - generic [ref=e53]: Passwords match
+        - generic [ref=e54]:
+          - checkbox "I agree to the Terms of Service and Privacy Policy" [active] [ref=e55]
+          - generic [ref=e56]:
+            - text: I agree to the
+            - link "Terms of Service" [ref=e57] [cursor=pointer]:
+              - /url: "#"
+            - text: and
+            - link "Privacy Policy" [ref=e58] [cursor=pointer]:
+              - /url: "#"
+        - button "Create account" [ref=e60] [cursor=pointer]:
+          - generic [ref=e62] [cursor=pointer]: Create account
+      - generic [ref=e63]:
+        - generic [ref=e68]: Already have an account?
+        - link "Sign in instead" [ref=e70] [cursor=pointer]:
+          - /url: /login
 ```
