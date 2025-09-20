@@ -15,6 +15,8 @@ show_usage() {
     echo "  lint        Run code quality checks"
     echo "  format      Format code with black and isort"
     echo "  migrate     Run database migrations"
+    echo "  makemigrations  Create new migration"
+    echo "  reset-db    Reset database"
     echo "  worker      Start Celery worker"
     echo "  shell       Start Python shell with project context"
     echo "  clean       Clean cache and temporary files"
@@ -49,6 +51,20 @@ case "$1" in
         ;;
     migrate)
         echo "Running database migrations..."
+        uv run alembic upgrade head
+        ;;
+    makemigrations)
+        echo "Creating new migration..."
+        shift
+        if [ -z "$1" ]; then
+            echo "Usage: ./scripts/dev.sh makemigrations <migration_message>"
+            exit 1
+        fi
+        uv run alembic revision --autogenerate -m "$*"
+        ;;
+    reset-db)
+        echo "⚠️ Resetting database..."
+        rm -f requirements.db
         uv run alembic upgrade head
         ;;
     worker)

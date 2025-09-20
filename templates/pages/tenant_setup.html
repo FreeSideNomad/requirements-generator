@@ -1,0 +1,386 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Setup Your Organization - Requirements Generator{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-2xl">
+        <div class="flex justify-center">
+            <div class="w-16 h-16 bg-brand-600 rounded-xl flex items-center justify-center">
+                <i data-lucide="layers" class="w-10 h-10 text-white"></i>
+            </div>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Setup Your Organization
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Create your organization to start using Requirements Generator
+        </p>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
+        <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
+            <!-- Step Indicator -->
+            <nav aria-label="Progress" class="mb-8">
+                <ol role="list" class="flex items-center justify-center">
+                    <li class="relative">
+                        <div class="flex items-center">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-white">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </span>
+                            <span class="ml-4 text-sm font-medium text-gray-900">Account Created</span>
+                        </div>
+                    </li>
+                    <li class="relative ml-8">
+                        <div class="flex items-center">
+                            <div class="h-0.5 w-16 bg-gray-200"></div>
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-brand-600 bg-white">
+                                <span class="text-brand-600 font-medium">2</span>
+                            </span>
+                            <span class="ml-4 text-sm font-medium text-brand-600">Organization Setup</span>
+                        </div>
+                    </li>
+                    <li class="relative ml-8">
+                        <div class="flex items-center">
+                            <div class="h-0.5 w-16 bg-gray-200"></div>
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-300 bg-white">
+                                <span class="text-gray-500 font-medium">3</span>
+                            </span>
+                            <span class="ml-4 text-sm font-medium text-gray-500">Complete</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Tenant Creation Form -->
+            <form id="tenant-setup-form" hx-post="/api/tenant-setup" hx-swap="none" class="space-y-6">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        <label for="name" class="block text-sm font-medium leading-6 text-gray-900">
+                            Organization Name *
+                        </label>
+                        <div class="mt-2">
+                            <input id="name"
+                                   name="name"
+                                   type="text"
+                                   required
+                                   maxlength="255"
+                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm sm:leading-6"
+                                   placeholder="Acme Corporation">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-1">
+                        <label for="subdomain" class="block text-sm font-medium leading-6 text-gray-900">
+                            Subdomain *
+                        </label>
+                        <div class="mt-2 flex rounded-md shadow-sm">
+                            <input id="subdomain"
+                                   name="subdomain"
+                                   type="text"
+                                   required
+                                   pattern="^[a-z0-9]([a-z0-9\-]{1,61}[a-z0-9])?$"
+                                   maxlength="63"
+                                   class="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm sm:leading-6"
+                                   placeholder="acme">
+                            <span class="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
+                                .requirements.ai
+                            </span>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">
+                            This will be your organization's unique URL
+                        </p>
+                    </div>
+
+                    <div class="sm:col-span-1">
+                        <label for="industry" class="block text-sm font-medium leading-6 text-gray-900">
+                            Industry *
+                        </label>
+                        <div class="mt-2">
+                            <select id="industry"
+                                    name="industry"
+                                    required
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm sm:leading-6">
+                                <option value="">Select your industry</option>
+                                <option value="technology">Technology & Software</option>
+                                <option value="banking">Banking & Financial Services</option>
+                                <option value="healthcare">Healthcare & Medical</option>
+                                <option value="government">Government & Public Sector</option>
+                                <option value="education">Education</option>
+                                <option value="retail">Retail & E-commerce</option>
+                                <option value="insurance">Insurance</option>
+                                <option value="fintech">Fintech</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="billing_email" class="block text-sm font-medium leading-6 text-gray-900">
+                            Billing Email
+                        </label>
+                        <div class="mt-2">
+                            <input id="billing_email"
+                                   name="billing_email"
+                                   type="email"
+                                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-600 sm:text-sm sm:leading-6"
+                                   placeholder="billing@acme.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Industry Template Preview -->
+                <div id="industry-preview" class="hidden mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                    <h4 class="text-sm font-medium text-blue-900 mb-2">Industry Template Features</h4>
+                    <div id="template-features" class="text-sm text-blue-800"></div>
+                </div>
+
+                <!-- Subscription Tier Selection -->
+                <div class="mt-8">
+                    <fieldset>
+                        <legend class="text-sm font-medium leading-6 text-gray-900">Choose Your Plan</legend>
+                        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            <!-- Starter Plan -->
+                            <label class="relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between hover:bg-gray-50">
+                                <input type="radio" name="subscription_tier" value="starter" class="sr-only" checked>
+                                <span class="flex items-center">
+                                    <span class="flex flex-col text-sm">
+                                        <span class="font-medium text-gray-900">Starter</span>
+                                        <span class="text-gray-500">
+                                            <span class="block">Up to 5 users</span>
+                                            <span class="block">3 projects</span>
+                                            <span class="block">1GB storage</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+                                    <span class="font-medium text-gray-900">Free</span>
+                                    <span class="ml-1 text-gray-500 sm:ml-0">30 days trial</span>
+                                </span>
+                            </label>
+
+                            <!-- Professional Plan -->
+                            <label class="relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between hover:bg-gray-50">
+                                <input type="radio" name="subscription_tier" value="professional" class="sr-only">
+                                <span class="flex items-center">
+                                    <span class="flex flex-col text-sm">
+                                        <span class="font-medium text-gray-900">Professional</span>
+                                        <span class="text-gray-500">
+                                            <span class="block">Up to 25 users</span>
+                                            <span class="block">15 projects</span>
+                                            <span class="block">10GB storage</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+                                    <span class="font-medium text-gray-900">$49</span>
+                                    <span class="ml-1 text-gray-500 sm:ml-0">per month</span>
+                                </span>
+                            </label>
+
+                            <!-- Enterprise Plan -->
+                            <label class="relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between hover:bg-gray-50">
+                                <input type="radio" name="subscription_tier" value="enterprise" class="sr-only">
+                                <span class="flex items-center">
+                                    <span class="flex flex-col text-sm">
+                                        <span class="font-medium text-gray-900">Enterprise</span>
+                                        <span class="text-gray-500">
+                                            <span class="block">Up to 100 users</span>
+                                            <span class="block">50 projects</span>
+                                            <span class="block">100GB storage</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+                                    <span class="font-medium text-gray-900">$199</span>
+                                    <span class="ml-1 text-gray-500 sm:ml-0">per month</span>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="flex items-center justify-between pt-6">
+                    <button type="button"
+                            onclick="window.location.href='/login'"
+                            class="btn btn-outline">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        Back to Login
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="setup-button">
+                        <span class="flex items-center">
+                            <span id="setup-text">Create Organization</span>
+                            <div id="setup-spinner" class="hidden ml-2">
+                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            </div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-50"></div>
+    </div>
+</div>
+
+<script>
+// Industry templates configuration
+const industryTemplates = {
+    technology: {
+        name: "Technology & Software",
+        features: ["Agile workflows", "CI/CD integration", "API documentation", "Performance monitoring", "Scalability planning"]
+    },
+    banking: {
+        name: "Banking & Financial Services",
+        features: ["Compliance tracking", "Audit trails", "Data encryption", "Regulatory reporting", "SOX compliance"]
+    },
+    healthcare: {
+        name: "Healthcare & Medical",
+        features: ["HIPAA compliance", "Patient privacy", "Medical terminology", "FDA 21 CFR Part 11", "Clinical workflows"]
+    },
+    government: {
+        name: "Government & Public Sector",
+        features: ["Accessibility compliance", "Public transparency", "Security clearance", "FedRAMP compliance", "Citizen services"]
+    }
+};
+
+function updateIndustryPreview() {
+    const industrySelect = document.getElementById('industry');
+    const preview = document.getElementById('industry-preview');
+    const featuresDiv = document.getElementById('template-features');
+
+    if (industrySelect.value && industryTemplates[industrySelect.value]) {
+        const template = industryTemplates[industrySelect.value];
+        featuresDiv.innerHTML = `
+            <p class="mb-2">Your <strong>${template.name}</strong> organization will include:</p>
+            <ul class="list-disc list-inside space-y-1">
+                ${template.features.map(feature => `<li>${feature}</li>`).join('')}
+            </ul>
+        `;
+        preview.classList.remove('hidden');
+    } else {
+        preview.classList.add('hidden');
+    }
+}
+
+function updateSubdomain() {
+    const nameInput = document.getElementById('name');
+    const subdomainInput = document.getElementById('subdomain');
+
+    if (nameInput.value && !subdomainInput.value) {
+        // Auto-generate subdomain from organization name
+        const subdomain = nameInput.value
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .substring(0, 63);
+        subdomainInput.value = subdomain;
+    }
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden transform transition-all duration-300 ease-in-out ${
+        type === 'error' ? 'border-l-4 border-red-500' :
+        type === 'success' ? 'border-l-4 border-green-500' :
+        'border-l-4 border-blue-500'
+    }`;
+
+    toast.innerHTML = `
+        <div class="p-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    ${type === 'error' ?
+                        '<i data-lucide="alert-circle" class="h-5 w-5 text-red-400"></i>' :
+                        type === 'success' ?
+                        '<i data-lucide="check-circle" class="h-5 w-5 text-green-400"></i>' :
+                        '<i data-lucide="info" class="h-5 w-5 text-blue-400"></i>'
+                    }
+                </div>
+                <div class="ml-3 w-0 flex-1 pt-0.5">
+                    <p class="text-sm font-medium text-gray-900">${message}</p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button onclick="this.closest('.max-w-sm').remove()" class="rounded-md inline-flex text-gray-400 hover:text-gray-500">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('toast-container').appendChild(toast);
+    lucide.createIcons();
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.remove();
+        }
+    }, 5000);
+}
+
+// Event listeners
+document.getElementById('industry').addEventListener('change', updateIndustryPreview);
+document.getElementById('name').addEventListener('input', updateSubdomain);
+
+// Handle subscription tier selection styling
+document.querySelectorAll('input[name="subscription_tier"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        // Remove selection styling from all labels
+        document.querySelectorAll('label').forEach(label => {
+            if (label.querySelector('input[name="subscription_tier"]')) {
+                label.classList.remove('ring-2', 'ring-brand-600', 'border-brand-600');
+            }
+        });
+
+        // Add selection styling to checked label
+        if (this.checked) {
+            this.closest('label').classList.add('ring-2', 'ring-brand-600', 'border-brand-600');
+        }
+    });
+});
+
+// Handle form submission
+document.getElementById('tenant-setup-form').addEventListener('htmx:beforeRequest', function(event) {
+    const button = document.getElementById('setup-button');
+    const text = document.getElementById('setup-text');
+    const spinner = document.getElementById('setup-spinner');
+
+    button.disabled = true;
+    text.textContent = 'Creating...';
+    spinner.classList.remove('hidden');
+});
+
+document.getElementById('tenant-setup-form').addEventListener('htmx:afterRequest', function(event) {
+    const button = document.getElementById('setup-button');
+    const text = document.getElementById('setup-text');
+    const spinner = document.getElementById('setup-spinner');
+
+    button.disabled = false;
+    text.textContent = 'Create Organization';
+    spinner.classList.add('hidden');
+
+    if (event.detail.xhr.status === 201) {
+        showToast('Organization created successfully! Redirecting to dashboard...', 'success');
+
+        setTimeout(() => {
+            window.location.href = '/dashboard';
+        }, 2000);
+    } else {
+        const response = JSON.parse(event.detail.xhr.responseText);
+        showToast(response.detail || 'Failed to create organization. Please try again.', 'error');
+    }
+});
+
+// Initialize with starter plan selected
+document.querySelector('input[value="starter"]').closest('label').classList.add('ring-2', 'ring-brand-600', 'border-brand-600');
+
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+{% endblock %}

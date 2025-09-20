@@ -128,19 +128,23 @@ def register_routes(app: FastAPI) -> None:
     from src.shared.routes import health_router
     from src.auth.routes import auth_router
     from src.tenants.routes import tenants_router
+    from src.web.routes import web_router
 
     # Core routes
     app.include_router(health_router, tags=["health"])
     app.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
     app.include_router(tenants_router, prefix="/api/tenants", tags=["tenants"])
 
-    # Feature routes (will be added in later stages)
-    # from src.ai.routes import ai_router
-    # from src.requirements.routes import requirements_router
+    # Web interface routes
+    app.include_router(web_router, tags=["web"])
+
+    # Feature routes
+    from src.ai.routes import router as ai_router
+    from src.requirements.routes import router as requirements_router
     # from src.domain.routes import domain_router
 
-    # app.include_router(ai_router, prefix="/api/ai", tags=["ai"])
-    # app.include_router(requirements_router, prefix="/api/requirements", tags=["requirements"])
+    app.include_router(ai_router, prefix="/api/ai", tags=["ai"])
+    app.include_router(requirements_router, prefix="/api/requirements", tags=["requirements"])
     # app.include_router(domain_router, prefix="/api/domain", tags=["domain"])
 
 
@@ -171,9 +175,28 @@ def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
         """Handle Pydantic validation errors."""
+        # Convert validation errors to JSON-serializable format
+        errors = []
+        for error in exc.errors():
+            error_dict = {
+                "type": error.get("type"),
+                "loc": error.get("loc"),
+                "msg": error.get("msg"),
+                "input": error.get("input"),
+            }
+            # Handle non-serializable context
+            if "ctx" in error:
+                ctx = error["ctx"]
+                if isinstance(ctx, dict):
+                    error_dict["ctx"] = {
+                        k: str(v) if not isinstance(v, (str, int, float, bool, type(None))) else v
+                        for k, v in ctx.items()
+                    }
+            errors.append(error_dict)
+
         logger.warning(
             "Validation error occurred",
-            errors=exc.errors(),
+            errors=errors,
             path=request.url.path,
         )
         return JSONResponse(
@@ -182,7 +205,7 @@ def register_exception_handlers(app: FastAPI) -> None:
                 "error": {
                     "code": "VALIDATION_ERROR",
                     "message": "Request validation failed",
-                    "details": exc.errors(),
+                    "details": errors,
                 }
             },
         )

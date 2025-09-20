@@ -312,6 +312,60 @@ class CacheManager:
         return await RedisManager.delete_pattern(client, f"cache:{pattern}")
 
 
+# Simplified Redis client for service layers
+class RedisClient:
+    """Simplified Redis client wrapper for service layers."""
+
+    def __init__(self):
+        self._client = None
+
+    async def _get_client(self) -> Redis:
+        """Get Redis client instance."""
+        if not self._client:
+            self._client = await RedisManager.get_main_client()
+        return self._client
+
+    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+        """Set a value in Redis."""
+        client = await self._get_client()
+        return await RedisManager.set_json(client, key, value, ttl)
+
+    async def get(self, key: str, default: Any = None) -> Any:
+        """Get a value from Redis."""
+        client = await self._get_client()
+        return await RedisManager.get_json(client, key, default)
+
+    async def delete(self, key: str) -> bool:
+        """Delete a key from Redis."""
+        client = await self._get_client()
+        return await client.delete(key) > 0
+
+    async def setex(self, key: str, ttl: int, value: Any) -> bool:
+        """Set a value with expiration time."""
+        client = await self._get_client()
+        return await RedisManager.set_json(client, key, value, ttl)
+
+    async def delete_pattern(self, pattern: str) -> int:
+        """Delete all keys matching a pattern."""
+        client = await self._get_client()
+        return await RedisManager.delete_pattern(client, pattern)
+
+    async def exists(self, key: str) -> bool:
+        """Check if key exists."""
+        client = await self._get_client()
+        return await client.exists(key) > 0
+
+    async def expire(self, key: str, ttl: int) -> bool:
+        """Set expiration time for a key."""
+        client = await self._get_client()
+        return await client.expire(key, ttl)
+
+    async def ttl(self, key: str) -> int:
+        """Get TTL for a key."""
+        client = await self._get_client()
+        return await client.ttl(key)
+
+
 # Helper functions for dependency injection
 async def get_redis_client() -> Redis:
     """FastAPI dependency to get main Redis client."""

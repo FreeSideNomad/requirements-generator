@@ -1,55 +1,53 @@
--- Initialize PostgreSQL database with pgvector extension and development data
+-- PostgreSQL initialization script for Requirements Generator
+-- This script sets up the database with required extensions
 
--- Enable pgvector extension
+-- Enable pgvector extension for vector storage
 CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Enable uuid-ossp extension for UUID generation
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Enable pg_trgm for full-text search capabilities
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
--- Create development database if not exists
-\c requirements_db;
+-- Enable btree_gin for advanced indexing
+CREATE EXTENSION IF NOT EXISTS btree_gin;
 
--- Enable extensions in the requirements database
-CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
+-- Create a function to update updated_at timestamps
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = CURRENT_TIMESTAMP;
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
 
--- Create schemas for multi-tenant architecture
-CREATE SCHEMA IF NOT EXISTS shared;
-CREATE SCHEMA IF NOT EXISTS tenants;
-CREATE SCHEMA IF NOT EXISTS auth;
-CREATE SCHEMA IF NOT EXISTS ai;
-CREATE SCHEMA IF NOT EXISTS requirements;
-CREATE SCHEMA IF NOT EXISTS domain;
+-- Set up database configuration for better performance
+ALTER SYSTEM SET shared_preload_libraries = 'pg_stat_statements';
+ALTER SYSTEM SET max_connections = 200;
+ALTER SYSTEM SET shared_buffers = '256MB';
+ALTER SYSTEM SET effective_cache_size = '1GB';
+ALTER SYSTEM SET maintenance_work_mem = '64MB';
+ALTER SYSTEM SET checkpoint_completion_target = 0.9;
+ALTER SYSTEM SET wal_buffers = '16MB';
+ALTER SYSTEM SET default_statistics_target = 100;
 
--- Grant permissions to postgres user
-GRANT ALL ON SCHEMA shared TO postgres;
-GRANT ALL ON SCHEMA tenants TO postgres;
-GRANT ALL ON SCHEMA auth TO postgres;
-GRANT ALL ON SCHEMA ai TO postgres;
-GRANT ALL ON SCHEMA requirements TO postgres;
-GRANT ALL ON SCHEMA domain TO postgres;
+-- Reload configuration
+SELECT pg_reload_conf();
 
--- Create test database for development
-CREATE DATABASE requirements_test;
-\c requirements_test;
-
--- Enable extensions in test database
-CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
-
--- Create same schemas in test database
-CREATE SCHEMA IF NOT EXISTS shared;
-CREATE SCHEMA IF NOT EXISTS tenants;
-CREATE SCHEMA IF NOT EXISTS auth;
-CREATE SCHEMA IF NOT EXISTS ai;
-CREATE SCHEMA IF NOT EXISTS requirements;
-CREATE SCHEMA IF NOT EXISTS domain;
+-- Create schemas for better organization
+CREATE SCHEMA IF NOT EXISTS audit;
+CREATE SCHEMA IF NOT EXISTS analytics;
 
 -- Grant permissions
-GRANT ALL ON SCHEMA shared TO postgres;
-GRANT ALL ON SCHEMA tenants TO postgres;
-GRANT ALL ON SCHEMA auth TO postgres;
-GRANT ALL ON SCHEMA ai TO postgres;
-GRANT ALL ON SCHEMA requirements TO postgres;
-GRANT ALL ON SCHEMA domain TO postgres;
+GRANT USAGE ON SCHEMA public TO postgres;
+GRANT USAGE ON SCHEMA audit TO postgres;
+GRANT USAGE ON SCHEMA analytics TO postgres;
+
+-- Log successful initialization
+DO $$
+BEGIN
+    RAISE NOTICE 'Requirements Generator database initialized successfully';
+    RAISE NOTICE 'Extensions enabled: vector, uuid-ossp, pg_trgm, btree_gin';
+    RAISE NOTICE 'Schemas created: audit, analytics';
+END $$;

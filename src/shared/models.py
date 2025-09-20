@@ -41,6 +41,7 @@ class BaseResponse(BaseModel):
     success: bool = Field(default=True, description="Indicates if operation was successful")
     message: Optional[str] = Field(default=None, description="Optional response message")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Response timestamp")
+    details: Optional[Dict[str, Any]] = Field(default=None, description="Additional response details")
 
 
 class PaginatedResponse(BaseResponse):

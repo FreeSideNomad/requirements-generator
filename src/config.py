@@ -27,7 +27,7 @@ class Settings(BaseSettings):
 
     # Database
     database_url: str = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost:5432/requirements_db",
+        default="sqlite+aiosqlite:///./requirements.db",
         env="DATABASE_URL"
     )
     database_pool_size: int = Field(default=20, env="DATABASE_POOL_SIZE")

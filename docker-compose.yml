@@ -65,20 +65,7 @@ services:
         condition: service_healthy
     networks:
       - requirements_network
-    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-    develop:
-      watch:
-        - action: sync
-          path: ./src
-          target: /app/src
-        - action: sync
-          path: ./templates
-          target: /app/templates
-        - action: sync
-          path: ./static
-          target: /app/static
-        - action: rebuild
-          path: ./requirements.txt
+    command: uv run uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
   # Background Task Worker (Celery)
   worker:
@@ -101,7 +88,7 @@ services:
         condition: service_healthy
     networks:
       - requirements_network
-    command: celery -A src.shared.tasks worker --loglevel=info --concurrency=2
+    command: uv run celery -A src.shared.tasks worker --loglevel=info --concurrency=2
 
   # Celery Flower (Task Monitoring)
   flower:
@@ -119,7 +106,7 @@ services:
       - worker
     networks:
       - requirements_network
-    command: celery -A src.shared.tasks flower --port=5555
+    command: uv run celery -A src.shared.tasks flower --port=5555
 
   # Frontend Build Tool (Node.js for Tailwind CSS)
   frontend:

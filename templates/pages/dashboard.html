@@ -1,0 +1,214 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Dashboard - Requirements Generator{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <div class="bg-white shadow">
+        <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
+            <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="h-10 w-10 rounded-full bg-brand-600 flex items-center justify-center">
+                                <span class="text-sm font-medium text-white">
+                                    {{ user.first_name[0] if user.first_name else user.email[0] }}{{ user.last_name[0] if user.last_name else '' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                                Welcome, {{ user.first_name or user.username or user.email }}
+                            </h2>
+                            <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <i data-lucide="building" class="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400"></i>
+                                    {% if tenant %}
+                                        {{ tenant.name }}
+                                    {% else %}
+                                        No organization
+                                    {% endif %}
+                                </div>
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <i data-lucide="shield-check" class="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400"></i>
+                                    {{ user.role.replace('_', ' ').title() }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex space-x-3 md:ml-4 md:mt-0">
+                    <a href="/profile" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        <i data-lucide="user" class="mr-2 h-4 w-4"></i>
+                        Profile
+                    </a>
+                    {% if user.role in ['tenant_admin', 'super_admin'] %}
+                    <a href="/admin/users" class="inline-flex items-center rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-500">
+                        <i data-lucide="users" class="mr-2 h-4 w-4"></i>
+                        Manage Users
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-10">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <!-- Quick Actions -->
+            <div class="mb-8">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="file-plus" class="h-6 w-6 text-brand-600"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <p class="text-sm font-medium text-gray-900">New Project</p>
+                                <p class="truncate text-sm text-gray-500">Start requirements gathering</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="upload" class="h-6 w-6 text-brand-600"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <p class="text-sm font-medium text-gray-900">Import Documents</p>
+                                <p class="truncate text-sm text-gray-500">Upload existing requirements</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="bot" class="h-6 w-6 text-brand-600"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <p class="text-sm font-medium text-gray-900">AI Assistant</p>
+                                <p class="truncate text-sm text-gray-500">Get intelligent suggestions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="users" class="h-6 w-6 text-brand-600"></i>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <span class="absolute inset-0" aria-hidden="true"></span>
+                                <p class="text-sm font-medium text-gray-900">Team Collaboration</p>
+                                <p class="truncate text-sm text-gray-500">Invite team members</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Projects -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Recent Projects</h3>
+                    <a href="#" class="text-sm font-medium text-brand-600 hover:text-brand-500">View all</a>
+                </div>
+                <div class="bg-white shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="text-center py-12">
+                            <i data-lucide="folder" class="mx-auto h-12 w-12 text-gray-400"></i>
+                            <h3 class="mt-2 text-sm font-semibold text-gray-900">No projects yet</h3>
+                            <p class="mt-1 text-sm text-gray-500">Get started by creating your first requirements project.</p>
+                            <div class="mt-6">
+                                <button type="button" class="inline-flex items-center rounded-md bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-500">
+                                    <i data-lucide="plus" class="mr-1.5 h-4 w-4"></i>
+                                    New Project
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Overview -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="file-text" class="h-6 w-6 text-gray-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Requirements</dt>
+                                    <dd class="text-lg font-medium text-gray-900">0</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-5 py-3">
+                        <div class="text-sm">
+                            <span class="font-medium text-gray-900">Coming soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="users" class="h-6 w-6 text-gray-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Team Members</dt>
+                                    <dd class="text-lg font-medium text-gray-900">1</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-5 py-3">
+                        <div class="text-sm">
+                            <a href="/admin/users" class="font-medium text-brand-600 hover:text-brand-500">
+                                Manage team
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i data-lucide="activity" class="h-6 w-6 text-gray-400"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Active Projects</dt>
+                                    <dd class="text-lg font-medium text-gray-900">0</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-5 py-3">
+                        <div class="text-sm">
+                            <span class="font-medium text-gray-900">Ready to start</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+{% endblock %}

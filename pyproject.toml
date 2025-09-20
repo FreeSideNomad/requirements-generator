@@ -26,39 +26,32 @@ dependencies = [
     "pydantic[email]",
     "pydantic-settings",
     "python-multipart",
-
     # Database
     "asyncpg",
+    "aiosqlite",
     "sqlalchemy[asyncio]",
     "alembic",
-
     # Redis and session management
     "redis[hiredis]",
-
     # Authentication and security
     "python-jose[cryptography]",
     "passlib[bcrypt]",
-
     # AI Integration
     "openai",
     "tiktoken",
-
     # Background tasks
     "celery[redis]",
-
     # Template rendering
     "jinja2",
-
     # HTTP client
     "httpx",
-
     # Utilities
     "python-slugify",
     "structlog",
     "rich",
-
     # Monitoring
     "prometheus-fastapi-instrumentator",
+    "sse-starlette>=3.0.2",
 ]
 
 [project.optional-dependencies]

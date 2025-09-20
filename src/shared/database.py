@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncEngine,
 )
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.pool import NullPool, QueuePool
+from sqlalchemy.pool import NullPool, QueuePool, StaticPool
 from sqlalchemy import MetaData
 
 from src.config import settings
@@ -47,16 +47,32 @@ async def init_database() -> None:
     logger.info("Initializing database connection", url=settings.database_url.split("@")[0] + "@***")
 
     try:
-        # Create async engine
-        engine = create_async_engine(
-            settings.database_url,
-            echo=settings.database_echo,
-            pool_size=settings.database_pool_size,
-            max_overflow=settings.database_max_overflow,
-            poolclass=QueuePool if not settings.is_testing else NullPool,
-            pool_pre_ping=True,
-            pool_recycle=3600,  # Recycle connections every hour
-        )
+        # Create async engine with appropriate pool for database type
+        engine_kwargs = {
+            "echo": settings.database_echo,
+            "pool_pre_ping": True,
+        }
+
+        # Configure pooling based on database type and environment
+        if "sqlite" in settings.database_url:
+            # SQLite with async requires StaticPool or NullPool
+            engine_kwargs.update({
+                "poolclass": StaticPool,
+                "connect_args": {"check_same_thread": False},
+            })
+        elif settings.is_testing:
+            # Use NullPool for testing to avoid connection sharing issues
+            engine_kwargs["poolclass"] = NullPool
+        else:
+            # Use QueuePool for PostgreSQL and other databases
+            engine_kwargs.update({
+                "poolclass": QueuePool,
+                "pool_size": settings.database_pool_size,
+                "max_overflow": settings.database_max_overflow,
+                "pool_recycle": 3600,  # Recycle connections every hour
+            })
+
+        engine = create_async_engine(settings.database_url, **engine_kwargs)
 
         # Create session maker
         async_session_maker = async_sessionmaker(
@@ -68,8 +84,9 @@ async def init_database() -> None:
         )
 
         # Test connection
+        from sqlalchemy import text
         async with engine.begin() as conn:
-            await conn.execute("SELECT 1")
+            await conn.execute(text("SELECT 1"))
 
         logger.info("Database connection initialized successfully")
 
@@ -190,3 +207,12 @@ async def execute_with_retry(operation, max_retries: int = 3, delay: float = 1.0
                 )
 
     raise last_exception
+
+
+# Import all models for Alembic to discover them
+from src.tenants.models import Tenant, TenantInvitation, TenantFeature  # noqa: E402
+from src.auth.models import User, UserSession, UserInvitation, AuditLog  # noqa: E402
+from src.requirements.models import (  # noqa: E402
+    Project, ProjectMember, Requirement, AcceptanceCriteria,
+    RequirementComment, RequirementAttachment, RequirementTemplate
+)

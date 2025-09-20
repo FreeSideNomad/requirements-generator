@@ -8,20 +8,26 @@
     "build-css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify",
     "build-css:watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
     "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "autoprefixer": "^10.4.16",
+    "playwright": "^1.55.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "tailwindcss": "^3.3.6"
   },
   "dependencies": {
-    "htmx.org": "^1.9.8",
     "alpinejs": "^3.13.3",
+    "htmx.org": "^1.9.8",
     "lucide": "^0.292.0"
   }
 }

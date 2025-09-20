@@ -1,0 +1,147 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Select Tenant - Requirements Generator{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="flex justify-center">
+            <div class="w-12 h-12 bg-brand-600 rounded-lg flex items-center justify-center">
+                <i data-lucide="layers" class="w-8 h-8 text-white"></i>
+            </div>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Select Your Organization
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Choose your organization to continue to the Requirements Generator platform
+        </p>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            {% if tenants %}
+            <form method="post" action="{{ url_for('set_tenant') }}" class="space-y-4">
+                <div class="grid gap-4">
+                    {% for tenant in tenants %}
+                    <label class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="tenant_id" value="{{ tenant.id }}" class="sr-only" required>
+
+                        <div class="flex flex-1 items-center">
+                            <div class="flex-shrink-0">
+                                <!-- Industry Icon -->
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center
+                                    {% if tenant.industry.value == 'banking' %}bg-blue-100 text-blue-600
+                                    {% elif tenant.industry.value == 'healthcare' %}bg-red-100 text-red-600
+                                    {% elif tenant.industry.value == 'technology' %}bg-purple-100 text-purple-600
+                                    {% elif tenant.industry.value == 'government' %}bg-green-100 text-green-600
+                                    {% else %}bg-gray-100 text-gray-600{% endif %}">
+                                    {% if tenant.industry.value == 'banking' %}
+                                        <i data-lucide="landmark" class="w-5 h-5"></i>
+                                    {% elif tenant.industry.value == 'healthcare' %}
+                                        <i data-lucide="heart-pulse" class="w-5 h-5"></i>
+                                    {% elif tenant.industry.value == 'technology' %}
+                                        <i data-lucide="code" class="w-5 h-5"></i>
+                                    {% elif tenant.industry.value == 'government' %}
+                                        <i data-lucide="shield" class="w-5 h-5"></i>
+                                    {% else %}
+                                        <i data-lucide="building" class="w-5 h-5"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="ml-4 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-sm font-medium text-gray-900">{{ tenant.name }}</h3>
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium
+                                        {% if tenant.status.value == 'active' %}bg-green-100 text-green-800
+                                        {% elif tenant.status.value == 'trial' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ tenant.status.value.title() }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-500">{{ tenant.industry.value.title() }} Organization</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ tenant.subdomain }}.requirements.ai</p>
+                            </div>
+                        </div>
+
+                        <!-- Selection indicator -->
+                        <div class="absolute -inset-px rounded-lg border-2 border-transparent peer-checked:border-brand-600 pointer-events-none"></div>
+                        <div class="absolute top-4 right-4 h-4 w-4 rounded-full border border-gray-300 peer-checked:border-brand-600 peer-checked:bg-brand-600">
+                            <div class="h-2 w-2 rounded-full bg-white peer-checked:bg-white absolute top-0.5 left-0.5 peer-checked:opacity-100 opacity-0 transition-opacity"></div>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                    <button type="button"
+                            onclick="window.history.back()"
+                            class="btn btn-outline">
+                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                        Back
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Continue
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </button>
+                </div>
+            </form>
+
+            {% else %}
+            <div class="text-center py-12">
+                <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="building" class="w-8 h-8 text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No Organizations Available</h3>
+                <p class="text-gray-500 mb-6">You don't have access to any organizations yet.</p>
+
+                <div class="space-y-3">
+                    <a href="{{ url_for('create_tenant_page') }}" class="btn btn-primary">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                        Create Organization
+                    </a>
+
+                    <p class="text-sm text-gray-500">
+                        Or contact your administrator for access to an existing organization.
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if tenants %}
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-500">
+                Don't see your organization?
+                <a href="{{ url_for('create_tenant_page') }}" class="font-medium text-brand-600 hover:text-brand-500">
+                    Create a new one
+                </a>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Handle radio button selection styling
+    document.addEventListener('DOMContentLoaded', function() {
+        const radios = document.querySelectorAll('input[type="radio"][name="tenant_id"]');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove selection styling from all labels
+                document.querySelectorAll('label').forEach(label => {
+                    label.classList.remove('ring-2', 'ring-brand-600', 'border-brand-600');
+                });
+
+                // Add selection styling to checked label
+                if (this.checked) {
+                    this.closest('label').classList.add('ring-2', 'ring-brand-600', 'border-brand-600');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
