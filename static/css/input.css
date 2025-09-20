@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design Tokens - CSS Custom Properties */
+:root {
+  /* Spacing tokens */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Typography tokens */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Border radius tokens */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+
+  /* Shadow tokens */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Animation tokens */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Multi-tenant design tokens */
+[data-tenant="banking"] {
+  --color-brand-50: theme('colors.banking.50');
+  --color-brand-500: theme('colors.banking.500');
+  --color-brand-600: theme('colors.banking.600');
+  --color-brand-700: theme('colors.banking.700');
+  --color-brand-900: theme('colors.banking.900');
+}
+
+[data-tenant="fintech"] {
+  --color-brand-50: theme('colors.fintech.50');
+  --color-brand-500: theme('colors.fintech.500');
+  --color-brand-600: theme('colors.fintech.600');
+  --color-brand-700: theme('colors.fintech.700');
+  --color-brand-900: theme('colors.fintech.900');
+}
+
+[data-tenant="healthcare"] {
+  --color-brand-50: theme('colors.healthcare.50');
+  --color-brand-500: theme('colors.healthcare.500');
+  --color-brand-600: theme('colors.healthcare.600');
+  --color-brand-700: theme('colors.healthcare.700');
+  --color-brand-900: theme('colors.healthcare.900');
+}
+
+[data-tenant="insurance"] {
+  --color-brand-50: theme('colors.insurance.50');
+  --color-brand-500: theme('colors.insurance.500');
+  --color-brand-600: theme('colors.insurance.600');
+  --color-brand-700: theme('colors.insurance.700');
+  --color-brand-900: theme('colors.insurance.900');
+}
+
+/* Base component styles */
+@layer base {
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  h1 { @apply text-3xl; }
+  h2 { @apply text-2xl; }
+  h3 { @apply text-xl; }
+  h4 { @apply text-lg; }
+}
+
+@layer components {
+  /* Navigation components */
+  .nav-item {
+    @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200;
+    @apply text-sidebar-text hover:bg-sidebar-hover hover:text-gray-900;
+  }
+
+  .nav-item.active {
+    @apply bg-sidebar-active text-gray-900 font-semibold;
+  }
+
+  .nav-item.brand {
+    @apply bg-brand-600 text-white hover:bg-brand-700;
+  }
+
+  .nav-group-title {
+    @apply px-3 py-2 text-xs font-semibold text-sidebar-text-muted uppercase tracking-wider;
+  }
+
+  .nav-divider {
+    @apply my-2 border-t border-sidebar-border;
+  }
+
+  /* Button components */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
+  }
+
+  .btn-sm { @apply px-3 py-1.5 text-sm; }
+  .btn-md { @apply px-4 py-2 text-sm; }
+  .btn-lg { @apply px-6 py-3 text-base; }
+
+  /* Card components */
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-200;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .card-footer {
+    @apply px-6 py-4 border-t border-gray-200;
+  }
+
+  /* Form components */
+  .form-input {
+    @apply block w-full rounded-lg border-gray-300 shadow-sm;
+    @apply focus:border-brand-500 focus:ring-brand-500 sm:text-sm;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .form-error {
+    @apply mt-1 text-sm text-red-600;
+  }
+
+  /* Layout components */
+  .sidebar {
+    @apply fixed inset-y-0 left-0 w-64 bg-sidebar-background border-r border-sidebar-border;
+    @apply transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out;
+  }
+
+  .sidebar.open {
+    @apply translate-x-0;
+  }
+
+  .main-content {
+    @apply lg:ml-64 min-h-screen;
+  }
+
+  /* Status indicators */
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .status-active { @apply bg-green-100 text-green-800; }
+  .status-pending { @apply bg-yellow-100 text-yellow-800; }
+  .status-inactive { @apply bg-gray-100 text-gray-800; }
+  .status-error { @apply bg-red-100 text-red-800; }
+}
+
+@layer utilities {
+  /* HTMX animations */
+  .htmx-indicator {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  .htmx-request .htmx-indicator {
+    @apply opacity-100;
+  }
+
+  .htmx-swapping {
+    @apply opacity-50 transition-opacity duration-300;
+  }
+
+  /* Utility classes for role-based visibility */
+  .role-admin { display: block; }
+  .role-user.hide-from-user { display: none; }
+  .role-readonly.hide-from-readonly { display: none; }
+
+  /* Responsive utilities for navigation */
+  .nav-mobile-only {
+    @apply lg:hidden;
+  }
+
+  .nav-desktop-only {
+    @apply hidden lg:block;
+  }
+
+  /* Brand color utilities */
+  .text-brand { color: var(--color-brand-600); }
+  .bg-brand { background-color: var(--color-brand-500); }
+  .border-brand { border-color: var(--color-brand-300); }
+
+  /* Focus states for accessibility */
+  .focus-brand {
+    @apply focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+  }
+}

@@ -1,0 +1,1 @@
+# Shared utilities and components for the Requirements Generator application

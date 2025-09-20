@@ -1,0 +1,27 @@
+{
+  "name": "requirements-generator",
+  "version": "1.0.0",
+  "description": "Multi-tenant SaaS requirements gathering platform",
+  "scripts": {
+    "dev": "npm run build-css:watch",
+    "build": "npm run build-css",
+    "build-css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify",
+    "build-css:watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "prettier": "^3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "tailwindcss": "^3.3.6"
+  },
+  "dependencies": {
+    "htmx.org": "^1.9.8",
+    "alpinejs": "^3.13.3",
+    "lucide": "^0.292.0"
+  }
+}

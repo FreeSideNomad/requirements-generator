@@ -54,17 +54,46 @@ This project is being developed in stages using Claude Code:
 git clone git@github.com:FreeSideNomad/requirements-generator.git
 cd requirements-generator
 
+# Install uv (ultra-fast Python package manager)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.local/bin/env
+
+# Install dependencies
+./scripts/dev.sh install
+
 # Set up development environment
 docker-compose up -d
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
 
 # Run database migrations
-alembic upgrade head
+./scripts/dev.sh migrate
 
 # Start development server
-uvicorn src.main:app --reload
+./scripts/dev.sh dev
+```
+
+## Development Commands
+
+```bash
+# Install dependencies
+./scripts/dev.sh install
+
+# Start development server
+./scripts/dev.sh dev
+
+# Run tests
+./scripts/dev.sh test
+
+# Run code quality checks
+./scripts/dev.sh lint
+
+# Format code
+./scripts/dev.sh format
+
+# Start background worker
+./scripts/dev.sh worker
+
+# Clean cache files
+./scripts/dev.sh clean
 ```
 
 ## Project Structure
