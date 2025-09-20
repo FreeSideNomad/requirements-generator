@@ -119,7 +119,8 @@ def sample_user_data():
         "last_name": "User",
         "role": "contributor",
         "is_active": True,
-        "is_verified": True
+        "is_verified": True,
+        "password": "password123"  # Plain password for test user
     }
 
 
@@ -194,13 +195,22 @@ class TestHelper:
     async def create_test_user(session: AsyncSession, tenant_id, **kwargs):
         """Create a test user."""
         from src.auth.models import User
+        from src.auth.jwt_handler import JWTHandler
+
+        # Extract password if provided and hash it
+        password = kwargs.pop("password", "password123")
+        jwt_handler = JWTHandler()
+        password_hash = jwt_handler.hash_password(password)
 
         user_data = {
             "email": "test@example.com",
             "first_name": "Test",
             "last_name": "User",
             "tenant_id": tenant_id,
-            "role": "contributor"
+            "role": "contributor",
+            "password_hash": password_hash,
+            "is_active": True,
+            "is_verified": True
         }
         user_data.update(kwargs)
 
