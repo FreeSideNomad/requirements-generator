@@ -7,7 +7,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Dict, Any, Optional, List
 
-from sqlalchemy import String, Text, Boolean, DateTime, JSON, ForeignKey, UniqueConstraint
+from sqlalchemy import String, Text, Boolean, DateTime, JSON, ForeignKey, UniqueConstraint, Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -61,11 +61,11 @@ class User(Base):
 
     # Authentication
     password_hash: Mapped[Optional[str]] = mapped_column(String(255))  # For local auth
-    auth_provider: Mapped[AuthProvider] = mapped_column(String(20), default=AuthProvider.LOCAL)
+    auth_provider: Mapped[AuthProvider] = mapped_column(SQLEnum(AuthProvider), default=AuthProvider.LOCAL)
     external_id: Mapped[Optional[str]] = mapped_column(String(255))  # For external auth
 
     # Account status
-    status: Mapped[UserStatus] = mapped_column(String(20), default=UserStatus.PENDING)
+    status: Mapped[UserStatus] = mapped_column(SQLEnum(UserStatus), default=UserStatus.PENDING)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
 
@@ -77,7 +77,7 @@ class User(Base):
     )
 
     # Role and permissions
-    role: Mapped[UserRole] = mapped_column(String(20), default=UserRole.READER)
+    role: Mapped[UserRole] = mapped_column(SQLEnum(UserRole), default=UserRole.READER)
     permissions: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
 
     # Profile information

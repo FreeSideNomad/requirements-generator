@@ -51,15 +51,20 @@ app = FastAPI(
 async def startup_event():
     """Initialize database and seed test data for development."""
     try:
-        from src.shared.database import init_database
+        from src.shared.database import init_database, create_database_tables
         from src.shared.database_seed import seed_test_data
 
         # Initialize database first
         await init_database()
         print("✅ Database initialized for development")
 
+        # Create database tables if they don't exist
+        await create_database_tables()
+        print("✅ Database tables created")
+
         # Then seed test data
         await seed_test_data()
+        print("✅ Test data seeded for development")
     except Exception as e:
         print(f"⚠️  Warning: Could not initialize database or seed test data: {e}")
         print("E2E tests may fail due to missing database setup")
