@@ -8,6 +8,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Default brand colors (can be overridden by tenant)
+        brand: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554'
+        },
         // Multi-tenant brand colors
         banking: {
           50: '#eff6ff',
@@ -105,15 +119,15 @@ module.exports = {
     require('@tailwindcss/typography'),
   ],
   safelist: [
-    // Dynamic classes for multi-tenant theming
+    // Dynamic classes for multi-tenant theming and default brand
     {
-      pattern: /bg-(banking|fintech|healthcare|insurance)-(50|100|500|600|700)/,
+      pattern: /bg-(brand|banking|fintech|healthcare|insurance)-(50|100|500|600|700)/,
     },
     {
-      pattern: /text-(banking|fintech|healthcare|insurance)-(600|700|800|900)/,
+      pattern: /text-(brand|banking|fintech|healthcare|insurance)-(600|700|800|900)/,
     },
     {
-      pattern: /border-(banking|fintech|healthcare|insurance)-(200|300|400)/,
+      pattern: /border-(brand|banking|fintech|healthcare|insurance)-(200|300|400)/,
     }
   ]
 }
