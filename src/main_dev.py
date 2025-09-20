@@ -46,16 +46,23 @@ app = FastAPI(
 )
 
 
-# Startup event to seed test data
+# Startup event to initialize database and seed test data
 @app.on_event("startup")
 async def startup_event():
     """Initialize database and seed test data for development."""
     try:
+        from src.shared.database import init_database
         from src.shared.database_seed import seed_test_data
+
+        # Initialize database first
+        await init_database()
+        print("✅ Database initialized for development")
+
+        # Then seed test data
         await seed_test_data()
     except Exception as e:
-        print(f"⚠️  Warning: Could not seed test data: {e}")
-        print("E2E tests may fail due to missing test users")
+        print(f"⚠️  Warning: Could not initialize database or seed test data: {e}")
+        print("E2E tests may fail due to missing database setup")
 
 # Configure CORS for development
 app.add_middleware(

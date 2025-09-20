@@ -58,6 +58,10 @@ async def create_test_tenant_and_user(session: AsyncSession):
         await session.flush()  # Get the ID
         print(f"✅ Created test tenant: {test_tenant.name}")
 
+    # Create test users with hashed password
+    jwt_handler = JWTHandler()
+    password_hash = jwt_handler.hash_password("password123")
+
     # Check if test user already exists
     result = await session.execute(
         select(User).where(User.email == "test@example.com")
@@ -65,10 +69,6 @@ async def create_test_tenant_and_user(session: AsyncSession):
     test_user = result.scalar_one_or_none()
 
     if not test_user:
-        # Create test user with hashed password
-        jwt_handler = JWTHandler()
-        password_hash = jwt_handler.hash_password("password123")
-
         test_user = User(
             id=uuid.uuid4(),
             email="test@example.com",
@@ -85,6 +85,30 @@ async def create_test_tenant_and_user(session: AsyncSession):
         )
         session.add(test_user)
         print(f"✅ Created test user: {test_user.email}")
+
+    # Check if admin user already exists
+    result = await session.execute(
+        select(User).where(User.email == "admin@example.com")
+    )
+    admin_user = result.scalar_one_or_none()
+
+    if not admin_user:
+        admin_user = User(
+            id=uuid.uuid4(),
+            email="admin@example.com",
+            first_name="Admin",
+            last_name="User",
+            password_hash=password_hash,
+            auth_provider=AuthProvider.LOCAL,
+            status=UserStatus.ACTIVE,
+            is_active=True,
+            is_verified=True,
+            tenant_id=test_tenant.id,
+            role=UserRole.TENANT_ADMIN,
+            permissions={}
+        )
+        session.add(admin_user)
+        print(f"✅ Created admin user: {admin_user.email}")
 
     # Commit the changes
     await session.commit()

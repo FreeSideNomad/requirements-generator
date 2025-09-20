@@ -212,7 +212,4 @@ async def execute_with_retry(operation, max_retries: int = 3, delay: float = 1.0
 # Import all models for Alembic to discover them
 from src.tenants.models import Tenant, TenantInvitation, TenantFeature  # noqa: E402
 from src.auth.models import User, UserSession, UserInvitation, AuditLog  # noqa: E402
-from src.requirements.models import (  # noqa: E402
-    Project, ProjectMember, Requirement, AcceptanceCriteria,
-    RequirementComment, RequirementAttachment, RequirementTemplate
-)
+from src.projects.models import Project, ProjectMember, Requirement, RequirementComment  # noqa: E402
