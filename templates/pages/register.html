@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md" data-testid="register-header">
         <div class="flex justify-center">
             <div class="w-16 h-16 bg-brand-600 rounded-xl flex items-center justify-center">
                 <i data-lucide="layers" class="w-10 h-10 text-white"></i>
@@ -22,7 +22,7 @@
         </p>
     </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md" data-testid="register-form-container">
         <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
             {% if invitation_data %}
             <!-- Invitation Info -->
@@ -42,7 +42,7 @@
             {% endif %}
 
             <!-- Registration Form -->
-            <form id="register-form" hx-post="/auth/register" hx-swap="none" class="space-y-6">
+            <form id="register-form" hx-post="/auth/register" hx-swap="none" hx-disabled-elt="#register-button" class="space-y-6">
                 {% if invitation_token %}
                 <input type="hidden" name="invitation_token" value="{{ invitation_token }}">
                 {% endif %}
