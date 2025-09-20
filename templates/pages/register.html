@@ -42,7 +42,7 @@
             {% endif %}
 
             <!-- Registration Form -->
-            <form id="register-form" hx-post="/auth/register" hx-swap="none" hx-disabled-elt="#register-button" class="space-y-6">
+            <form id="register-form" hx-post="/api/auth/register" hx-swap="none" hx-disabled-elt="#register-button" class="space-y-6">
                 {% if invitation_token %}
                 <input type="hidden" name="invitation_token" value="{{ invitation_token }}">
                 {% endif %}
