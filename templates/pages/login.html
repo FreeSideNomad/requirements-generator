@@ -285,13 +285,9 @@ document.getElementById('login-form').addEventListener('htmx:afterRequest', func
         const response = JSON.parse(event.detail.xhr.responseText);
         if (response.success) {
             showToast('Login successful! Redirecting...', 'success');
-            // Store token and redirect
+            // Store token - HTMX will handle redirect via HX-Redirect header
             localStorage.setItem('access_token', response.access_token);
             localStorage.setItem('refresh_token', response.refresh_token);
-
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 1000);
         }
     } else {
         const response = JSON.parse(event.detail.xhr.responseText);
