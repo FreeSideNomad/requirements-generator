@@ -6,7 +6,7 @@ Handles user authentication, session management, and authorization.
 import uuid
 from typing import Dict, Any, Optional, List
 
-from fastapi import APIRouter, HTTPException, Depends, status, Header, Query
+from fastapi import APIRouter, HTTPException, Depends, status, Header, Query, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from ..shared.models import BaseResponse
@@ -80,11 +80,16 @@ async def register(
 
 
 @auth_router.post("/login")
-async def login(login_data: LoginRequest) -> LoginResponse:
+async def login(login_data: LoginRequest, response: Response) -> LoginResponse:
     """Authenticate user with email and password."""
     try:
         auth_service = AuthService()
-        return await auth_service.authenticate_user(login_data)
+        login_response = await auth_service.authenticate_user(login_data)
+
+        # Add HX-Redirect header for HTMX to redirect to dashboard
+        response.headers["HX-Redirect"] = "/dashboard"
+
+        return login_response
 
     except AuthenticationError as e:
         raise HTTPException(
