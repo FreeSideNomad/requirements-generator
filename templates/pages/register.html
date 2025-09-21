@@ -341,9 +341,19 @@ document.getElementById('register-form').addEventListener('htmx:afterRequest', f
     const text = document.getElementById('register-text');
     const spinner = document.getElementById('register-spinner');
 
-    button.disabled = false;
-    text.textContent = 'Create account';
-    spinner.classList.add('hidden');
+    // Keep button disabled for brief period to prevent double-clicks
+    setTimeout(() => {
+        if (event.detail.xhr.status === 201) {
+            button.disabled = true; // Keep disabled during redirect
+            text.textContent = 'Success! Redirecting...';
+            spinner.classList.add('hidden');
+        } else {
+            // Re-enable after error response
+            button.disabled = false;
+            text.textContent = 'Create account';
+            spinner.classList.add('hidden');
+        }
+    }, 100);
 
     if (event.detail.xhr.status === 201) {
         const response = JSON.parse(event.detail.xhr.responseText);

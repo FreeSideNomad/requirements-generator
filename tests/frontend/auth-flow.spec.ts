@@ -212,11 +212,11 @@ test.describe('Navigation and UI', () => {
 
     // Test desktop view
     await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.locator('.sm\\:mx-auto')).toBeVisible();
+    await expect(page.locator('[data-testid="login-header"]')).toBeVisible();
 
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.locator('input[name="email"]')).toBeVisible();
+    await expect(page.locator('#email')).toBeVisible();
     await expect(page.locator('input[name="password"]')).toBeVisible();
   });
 

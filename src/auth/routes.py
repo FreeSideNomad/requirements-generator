@@ -48,11 +48,35 @@ async def get_current_user_dependency(
 
 @auth_router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(
-    registration_data: RegisterRequest,
-    tenant_id: Optional[uuid.UUID] = Query(None, description="Tenant ID for direct registration")
+    registration_data: Optional[RegisterRequest] = None,
+    tenant_id: Optional[uuid.UUID] = Query(None, description="Tenant ID for direct registration"),
+    # Form data parameters
+    email: Optional[str] = Form(None),
+    password: Optional[str] = Form(None),
+    first_name: Optional[str] = Form(None),
+    last_name: Optional[str] = Form(None),
+    username: Optional[str] = Form(None),
+    terms: Optional[str] = Form(None),
+    invitation_token: Optional[str] = Form(None)
 ) -> UserResponse:
     """Register a new user with local authentication."""
     try:
+        # Handle form data if provided, otherwise use JSON data
+        if email and password and first_name and last_name:
+            # Convert form data to RegisterRequest
+            registration_data = RegisterRequest(
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                username=username
+            )
+        elif registration_data is None:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Missing required registration data"
+            )
+
         auth_service = AuthService()
         user = await auth_service.register_user(registration_data, tenant_id)
         return user
