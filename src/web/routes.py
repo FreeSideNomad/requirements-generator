@@ -262,3 +262,64 @@ async def user_profile(
         "tenant": None,  # Would fetch tenant here
         "title": "Profile Settings"
     })
+
+
+# Requirements Management Routes
+@web_router.get("/projects/{project_id}/requirements", response_class=HTMLResponse)
+async def requirements_list(
+    request: Request,
+    project_id: int
+):
+    """Requirements list page for a project."""
+    # Mock data for now
+    mock_project = {
+        "id": project_id,
+        "name": "Sample Project",
+        "description": "A sample project for testing"
+    }
+
+    mock_requirements = [
+        {
+            "id": 1,
+            "title": "User Authentication",
+            "description": "Users should be able to log in and out",
+            "type": "functional",
+            "priority": "high",
+            "status": "draft"
+        },
+        {
+            "id": 2,
+            "title": "Data Validation",
+            "description": "All user inputs should be validated",
+            "type": "functional",
+            "priority": "medium",
+            "status": "approved"
+        }
+    ]
+
+    return templates.TemplateResponse("pages/requirements/list.html", {
+        "request": request,
+        "project": mock_project,
+        "requirements": mock_requirements,
+        "title": f"Requirements - {mock_project['name']}"
+    })
+
+
+@web_router.get("/projects/{project_id}/requirements/new", response_class=HTMLResponse)
+async def requirements_new(
+    request: Request,
+    project_id: int
+):
+    """New requirement creation form."""
+    # Mock project data
+    mock_project = {
+        "id": project_id,
+        "name": "Sample Project",
+        "description": "A sample project for testing"
+    }
+
+    return templates.TemplateResponse("pages/requirements/new.html", {
+        "request": request,
+        "project": mock_project,
+        "title": f"New Requirement - {mock_project['name']}"
+    })

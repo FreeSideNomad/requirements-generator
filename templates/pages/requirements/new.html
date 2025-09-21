@@ -1,0 +1,252 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold leading-7 text-gray-900">
+                        New Requirement
+                    </h1>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Project: {{ project.name }}
+                    </p>
+                </div>
+                <div>
+                    <a href="/projects/{{ project.id }}/requirements"
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i data-lucide="arrow-left" class="mr-2 h-4 w-4"></i>
+                        Back to Requirements
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requirement Form -->
+        <div class="bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <form id="requirement-form" class="space-y-6">
+                    <!-- Title -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">
+                            Title <span class="text-red-500">*</span>
+                        </label>
+                        <div class="mt-1">
+                            <input type="text"
+                                   name="title"
+                                   id="title"
+                                   required
+                                   class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                   placeholder="Enter requirement title">
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            A clear, concise title for the requirement
+                        </p>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">
+                            Description <span class="text-red-500">*</span>
+                        </label>
+                        <div class="mt-1">
+                            <textarea name="description"
+                                      id="description"
+                                      rows="4"
+                                      required
+                                      class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                      placeholder="Detailed description of the requirement"></textarea>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Provide a detailed description of what this requirement entails
+                        </p>
+                    </div>
+
+                    <!-- Type -->
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-gray-700">
+                            Type <span class="text-red-500">*</span>
+                        </label>
+                        <div class="mt-1">
+                            <select name="type"
+                                    id="type"
+                                    required
+                                    class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <option value="">Select requirement type</option>
+                                <option value="functional">Functional</option>
+                                <option value="non_functional">Non-Functional</option>
+                                <option value="user_story">User Story</option>
+                                <option value="epic">Epic</option>
+                                <option value="feature">Feature</option>
+                            </select>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Choose the type that best describes this requirement
+                        </p>
+                    </div>
+
+                    <!-- Priority -->
+                    <div>
+                        <label for="priority" class="block text-sm font-medium text-gray-700">
+                            Priority <span class="text-red-500">*</span>
+                        </label>
+                        <div class="mt-1">
+                            <select name="priority"
+                                    id="priority"
+                                    required
+                                    class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <option value="">Select priority</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Set the priority level for this requirement
+                        </p>
+                    </div>
+
+                    <!-- User Story Fields (Hidden by default) -->
+                    <div id="user-story-fields" class="hidden space-y-6">
+                        <div class="border-t border-gray-200 pt-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">User Story Details</h3>
+
+                            <!-- User Persona -->
+                            <div>
+                                <label for="user_persona" class="block text-sm font-medium text-gray-700">
+                                    User Persona
+                                </label>
+                                <div class="mt-1">
+                                    <input type="text"
+                                           name="user_persona"
+                                           id="user_persona"
+                                           class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                           placeholder="e.g., Product Manager, End User, Administrator">
+                                </div>
+                            </div>
+
+                            <!-- User Goal -->
+                            <div>
+                                <label for="user_goal" class="block text-sm font-medium text-gray-700">
+                                    User Goal
+                                </label>
+                                <div class="mt-1">
+                                    <textarea name="user_goal"
+                                              id="user_goal"
+                                              rows="2"
+                                              class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                              placeholder="I want to..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- User Benefit -->
+                            <div>
+                                <label for="user_benefit" class="block text-sm font-medium text-gray-700">
+                                    User Benefit
+                                </label>
+                                <div class="mt-1">
+                                    <textarea name="user_benefit"
+                                              id="user_benefit"
+                                              rows="2"
+                                              class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                              placeholder="So that..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Story Points -->
+                            <div>
+                                <label for="story_points" class="block text-sm font-medium text-gray-700">
+                                    Story Points
+                                </label>
+                                <div class="mt-1">
+                                    <select name="story_points"
+                                            id="story_points"
+                                            class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                        <option value="">Select story points</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="5">5</option>
+                                        <option value="8">8</option>
+                                        <option value="13">13</option>
+                                        <option value="21">21</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Acceptance Criteria -->
+                    <div>
+                        <label for="acceptance_criteria" class="block text-sm font-medium text-gray-700">
+                            Acceptance Criteria
+                        </label>
+                        <div class="mt-1">
+                            <textarea name="acceptance_criteria"
+                                      id="acceptance_criteria"
+                                      rows="4"
+                                      class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                      placeholder="Define the criteria that must be met for this requirement to be considered complete"></textarea>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            List the conditions that must be satisfied for this requirement to be accepted
+                        </p>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                        <button type="button"
+                                onclick="window.location.href='/projects/{{ project.id }}/requirements'"
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
+                            <i data-lucide="save" class="mr-2 h-4 w-4"></i>
+                            Create Requirement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show/hide user story fields based on type selection
+document.getElementById('type').addEventListener('change', function() {
+    const userStoryFields = document.getElementById('user-story-fields');
+    if (this.value === 'user_story') {
+        userStoryFields.classList.remove('hidden');
+    } else {
+        userStoryFields.classList.add('hidden');
+    }
+});
+
+// Handle form submission
+document.getElementById('requirement-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Collect form data
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    // Mock success - in real implementation, this would submit to API
+    console.log('Creating requirement:', data);
+
+    // Show success message
+    alert('Requirement created successfully! (Mock implementation)');
+
+    // Redirect back to requirements list
+    window.location.href = '/projects/{{ project.id }}/requirements';
+});
+
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+{% endblock %}
