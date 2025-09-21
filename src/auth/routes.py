@@ -6,7 +6,7 @@ Handles user authentication, session management, and authorization.
 import uuid
 from typing import Dict, Any, Optional, List
 
-from fastapi import APIRouter, HTTPException, Depends, status, Header, Query, Response
+from fastapi import APIRouter, HTTPException, Depends, status, Header, Query, Response, Form
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from ..shared.models import BaseResponse
@@ -80,9 +80,21 @@ async def register(
 
 
 @auth_router.post("/login")
-async def login(login_data: LoginRequest, response: Response) -> LoginResponse:
+async def login(
+    response: Response,
+    email: str = Form(...),
+    password: str = Form(...),
+    remember_me: bool = Form(False)
+) -> LoginResponse:
     """Authenticate user with email and password."""
     try:
+        # Create LoginRequest from form data
+        login_data = LoginRequest(
+            email=email,
+            password=password,
+            remember_me=remember_me
+        )
+
         auth_service = AuthService()
         login_response = await auth_service.authenticate_user(login_data)
 
