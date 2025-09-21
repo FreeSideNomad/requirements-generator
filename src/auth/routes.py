@@ -84,15 +84,17 @@ async def login(
     response: Response,
     email: str = Form(...),
     password: str = Form(...),
-    remember_me: bool = Form(False)
+    remember_me: Optional[str] = Form(None)
 ) -> LoginResponse:
     """Authenticate user with email and password."""
     try:
         # Create LoginRequest from form data
+        # Convert checkbox "on"/None to boolean
+        remember_me_bool = remember_me == "on" if remember_me else False
         login_data = LoginRequest(
             email=email,
             password=password,
-            remember_me=remember_me
+            remember_me=remember_me_bool
         )
 
         auth_service = AuthService()
